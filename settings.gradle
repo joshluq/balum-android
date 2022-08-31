@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 rootProject.name = "balum"
 include ':app'
 include ':domain'
+include ':data'
