@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">balum</string>
-    <string name="title_activity_welcome">WelcomeActivity</string>
+<!--    Welcome-->
+    <string name="welcome_signin_button">Create Account</string>
+    <string name="welcome_signup_button">Don’t have an account?</string>
+    <string name="welcome_logo_label">Welcome to</string>
 </resources>
