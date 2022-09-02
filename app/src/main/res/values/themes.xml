@@ -3,5 +3,6 @@
 
     <style name="Theme.Balum" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">#FF347AF0</item>
+        <item name="android:windowBackground">#FF347AF0</item>
     </style>
 </resources>
