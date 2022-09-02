@@ -16,11 +16,11 @@ import pe.joshluq.balum.R
 import pe.joshluq.balum.Screen
 
 @Composable
-fun WelcomeScreen(isForPreview: Boolean = false) {
+fun WelcomeScreen(isForPreview: Boolean = false, onNavigate: ((String) -> Unit)? = null) {
     Screen(isForPreview) {
         Column(modifier = Modifier.fillMaxHeight()) {
             BalumLogo()
-            ButtonContainer()
+            ButtonContainer(onNavigate = onNavigate)
         }
     }
 }
@@ -57,7 +57,7 @@ private fun BalumLogo(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun ButtonContainer(modifier: Modifier = Modifier) {
+private fun ButtonContainer(modifier: Modifier = Modifier, onNavigate: ((String) -> Unit)?) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -65,7 +65,7 @@ private fun ButtonContainer(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom
     ) {
-        Button(onClick = { /*TODO*/ }) {
+        Button(onClick = { onNavigate?.invoke("signin") }) {
             Text(text = stringResource(R.string.welcome_signin_button))
         }
         Button(onClick = { /*TODO*/ }) {

@@ -13,7 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import pe.joshluq.balum.feature.signin.SignInScreen
 import pe.joshluq.balum.feature.welcome.WelcomeScreen
 import pe.joshluq.balum.ui.theme.BalumTheme
 
@@ -21,7 +25,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            WelcomeScreen()
+            val navController = rememberNavController()
+            NavHost(navController = navController, startDestination = "welcome") {
+                composable("welcome") {
+                    WelcomeScreen(onNavigate = { route ->
+                        navController.navigate(route)
+                    })
+                }
+                composable("signin") { SignInScreen() }
+            }
         }
     }
 }
