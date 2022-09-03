@@ -13,11 +13,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pe.joshluq.balum.R
-import pe.joshluq.balum.Screen
+import pe.joshluq.balum.BalumBlueScreen
+import pe.joshluq.balum.Navigable
+import pe.joshluq.balum.common.navigation.Destination
 
 @Composable
-fun WelcomeScreen(isForPreview: Boolean = false, onNavigate: ((String) -> Unit)? = null) {
-    Screen(isForPreview) {
+fun WelcomeScreen(isForPreview: Boolean = false, onNavigate: Navigable = null) {
+    BalumBlueScreen(isForPreview) {
         Column(modifier = Modifier.fillMaxHeight()) {
             BalumLogo()
             ButtonContainer(onNavigate = onNavigate)
@@ -57,7 +59,12 @@ private fun BalumLogo(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun ButtonContainer(modifier: Modifier = Modifier, onNavigate: ((String) -> Unit)?) {
+private fun ButtonContainer(modifier: Modifier = Modifier, onNavigate: Navigable = null) {
+
+    fun onSignInButton() {
+        onNavigate?.invoke(Destination.SignIn)
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -65,7 +72,7 @@ private fun ButtonContainer(modifier: Modifier = Modifier, onNavigate: ((String)
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom
     ) {
-        Button(onClick = { onNavigate?.invoke("signin") }) {
+        Button(onClick = ::onSignInButton) {
             Text(text = stringResource(R.string.welcome_signin_button))
         }
         Button(onClick = { /*TODO*/ }) {
@@ -73,3 +80,4 @@ private fun ButtonContainer(modifier: Modifier = Modifier, onNavigate: ((String)
         }
     }
 }
+
