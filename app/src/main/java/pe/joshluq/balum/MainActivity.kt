@@ -12,6 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import pe.joshluq.balum.common.navigation.Destination
 import pe.joshluq.balum.feature.signin.SignInScreen
 import pe.joshluq.balum.feature.welcome.WelcomeScreen
@@ -19,6 +20,7 @@ import pe.joshluq.balum.ui.theme.BalumTheme
 
 typealias Navigable = ((Destination) -> Unit)?
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

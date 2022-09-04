@@ -1,7 +1,13 @@
 <resources>
     <string name="app_name">balum</string>
-<!--    Welcome-->
-    <string name="welcome_signin_button">Create Account</string>
+    <!--    General-->
+    <string name="default_message_error">Error</string>
+    <!--    Welcome-->
+    <string name="welcome_signin_button">Sign In</string>
     <string name="welcome_signup_button">Don’t have an account?</string>
     <string name="welcome_logo_label">Welcome to</string>
+    <!--    SignIn-->
+    <string name="signin_signin_button">Sign In</string>
+    <string name="signin_signup_button">Don’t have an account?</string>
+
 </resources>

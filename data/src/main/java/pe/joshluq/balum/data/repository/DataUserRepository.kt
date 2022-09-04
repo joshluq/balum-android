@@ -21,6 +21,6 @@ class DataUserRepository @Inject constructor(
 
     override suspend fun getUser(): Result<User> = handleResponse {
         api.getUserAsync()
-    }.mapCatching(::mapToUser)
+    }.map(::mapToUser)
 
 }

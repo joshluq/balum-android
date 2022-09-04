@@ -11,6 +11,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import pe.joshluq.balum.data.datasource.remote.ApiService
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -20,20 +21,23 @@ class RestApiModule {
 
     @Singleton
     @Provides
+    @Named("logging")
     fun provideHttpInterceptor(): Interceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(loggingInterceptor: Interceptor): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-        .build()
+    @Named("client")
+    fun provideOkHttpClient(@Named("logging") loggingInterceptor: Interceptor): OkHttpClient =
+        OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .build()
 
 
     @Singleton
     @Provides
-    fun provideApiService(client: OkHttpClient): ApiService {
+    fun provideApiService(@Named("client") client: OkHttpClient): ApiService {
         return Retrofit.Builder()
             .baseUrl("https://demo9600338.mockable.io")
             .client(client)

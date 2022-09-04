@@ -27,13 +27,6 @@ fun WelcomeScreen(isForPreview: Boolean = false, onNavigate: Navigable = null) {
     }
 }
 
-
-@Preview(showSystemUi = true)
-@Composable
-fun WelcomePreview() {
-    WelcomeScreen(true)
-}
-
 @Composable
 private fun BalumLogo(modifier: Modifier = Modifier) {
     Column(
@@ -80,4 +73,11 @@ private fun ButtonContainer(modifier: Modifier = Modifier, onNavigate: Navigable
         }
     }
 }
+
+@Preview(showSystemUi = true)
+@Composable
+fun WelcomePreview() {
+    WelcomeScreen(true)
+}
+
 
