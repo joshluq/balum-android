@@ -12,13 +12,15 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 private val DarkColorPalette = darkColors(
     primary = Blue1,
     primaryVariant = Blue2,
-    secondary = Teal200
-)
+    secondary = Teal200,
+    background = Color.Black,
+    )
 
 private val LightColorPalette = lightColors(
     primary = Blue1,
     primaryVariant = Blue2,
-    secondary = Teal200
+    secondary = Teal200,
+    background = Color.White,
 
     /* Other default colors to override
     background = Color.White,
@@ -32,7 +34,6 @@ private val LightColorPalette = lightColors(
 
 @Composable
 fun BalumTheme(
-    isForPreview: Boolean = false,
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
@@ -41,15 +42,6 @@ fun BalumTheme(
         DarkColorPalette
     } else {
         LightColorPalette
-    }
-
-    if (isForPreview.not()) {
-        val systemUiController = rememberSystemUiController()
-        SideEffect {
-            systemUiController.setStatusBarColor(
-                color = colors.primaryVariant
-            )
-        }
     }
 
     MaterialTheme(

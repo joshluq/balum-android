@@ -3,6 +3,8 @@ package pe.joshluq.balum.feature.welcome
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,17 +15,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pe.joshluq.balum.R
-import pe.joshluq.balum.BalumBlueScreen
 import pe.joshluq.balum.Navigable
 import pe.joshluq.balum.common.navigation.Destination
+import pe.joshluq.balum.ui.theme.BalumTheme
 
 @Composable
-fun WelcomeScreen(isForPreview: Boolean = false, onNavigate: Navigable = null) {
-    BalumBlueScreen(isForPreview) {
+fun WelcomeScreen(modifier: Modifier = Modifier, onNavigate: Navigable = null) {
+    Surface(
+        modifier = modifier.fillMaxSize(),
+        color = MaterialTheme.colors.primary
+    ){
         Column(modifier = Modifier.fillMaxHeight()) {
             BalumLogo()
             ButtonContainer(onNavigate = onNavigate)
         }
+    }
+}
+
+@Preview()
+@Composable
+fun WelcomeScreenPreview() {
+    BalumTheme {
+            WelcomeScreen()
     }
 }
 
@@ -72,12 +85,6 @@ private fun ButtonContainer(modifier: Modifier = Modifier, onNavigate: Navigable
             Text(text = stringResource(R.string.welcome_signup_button))
         }
     }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun WelcomePreview() {
-    WelcomeScreen(true)
 }
 
 
