@@ -4,7 +4,8 @@
     <string name="default_message_error">Error</string>
     <!--    Welcome-->
     <string name="welcome_signin_button">Sign In</string>
-    <string name="welcome_signup_button">Don’t have an account?</string>
+    <string name="welcome_signup_button">Don’t have an account? Sign Up</string>
+    <string name="welcome_signup_button_link">Sign Up</string>
     <string name="welcome_logo_label">Welcome to</string>
     <!--    SignIn-->
     <string name="signin_signin_button">Sign In</string>
