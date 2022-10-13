@@ -24,33 +24,39 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import pe.joshluq.balum.BalumScreen
 import pe.joshluq.balum.R
+import pe.joshluq.balum.ui.theme.BalumTheme
 import pe.joshluq.balum.ui.theme.LightBlue1
 
 @Composable
-fun SignInScreen(isForPreview: Boolean = false, viewModel: SignInViewModel = hiltViewModel()) {
-    BalumScreen(isForPreview) {
-
-        Box(
-            modifier = Modifier.fillMaxSize()
+fun SignInScreen(modifier: Modifier = Modifier, viewModel: SignInViewModel = hiltViewModel()) {
+    Surface(
+        modifier = modifier.fillMaxSize(),
+        color = MaterialTheme.colors.background
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(LightBlue1),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(LightBlue1),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Header(Modifier.weight(2f))
-                Form(Modifier.weight(3f), viewModel)
-            }
-            if (viewModel.state.isLoading) {
-                CircularProgressIndicator()
-            }
+            Header(Modifier.weight(2f))
+            Form(Modifier.weight(3f), viewModel)
         }
-
+        if (viewModel.state.isLoading) {
+            CircularProgressIndicator()
+        }
     }
 }
+
+@Preview
+@Composable
+fun SignInScreenPreview() {
+    BalumTheme {
+        SignInScreen()
+    }
+}
+
 
 @Composable
 private fun Header(modifier: Modifier = Modifier) {

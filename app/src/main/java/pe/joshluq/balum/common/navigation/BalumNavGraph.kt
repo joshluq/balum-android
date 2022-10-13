@@ -7,10 +7,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import pe.joshluq.balum.feature.signin.SignInScreen
 import pe.joshluq.balum.feature.welcome.WelcomeScreen
 
 @Composable
-fun BalumNavGraph(
+fun NavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     startDestination: Destination = Destination.Welcome,
@@ -19,15 +20,23 @@ fun BalumNavGraph(
     }
 ) {
 
+    val welcomeNavigator = WelcomeNavigator.build(navAction)
+
     NavHost(
         navController = navController,
         startDestination = startDestination.route,
         modifier = modifier,
     ) {
         composable(Destination.Welcome.route) {
-            WelcomeScreen(onNavigate = {
-                navAction.navigateToSignIn()
-            })
+            WelcomeScreen(
+                modifier = modifier,
+                navigator = welcomeNavigator
+            )
+        }
+        composable(Destination.SignIn.route) {
+            SignInScreen(
+                modifier = modifier
+            )
         }
     }
 }

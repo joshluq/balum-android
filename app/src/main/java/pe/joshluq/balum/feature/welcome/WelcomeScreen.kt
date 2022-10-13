@@ -14,22 +14,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pe.joshluq.balum.R
-import pe.joshluq.balum.Navigable
-import pe.joshluq.balum.common.navigation.Destination
+import pe.joshluq.balum.common.navigation.WelcomeNavigator
 import pe.joshluq.balum.ui.theme.BalumTheme
 import pe.joshluq.balum.ui.widget.ButtonType
 import pe.joshluq.balum.ui.widget.LinkText
 import pe.joshluq.balum.ui.widget.PrimaryButton
 
 @Composable
-fun WelcomeScreen(modifier: Modifier = Modifier, onNavigate: Navigable = null) {
+fun WelcomeScreen(modifier: Modifier = Modifier, navigator: WelcomeNavigator = WelcomeNavigator) {
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colors.primary
     ) {
         Column(modifier = Modifier.fillMaxHeight()) {
             BalumLogo()
-            ButtonContainer(onNavigate = onNavigate)
+            ButtonContainer(navigator = navigator)
         }
     }
 }
@@ -68,10 +67,13 @@ private fun BalumLogo(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun ButtonContainer(modifier: Modifier = Modifier, onNavigate: Navigable = null) {
+private fun ButtonContainer(
+    modifier: Modifier = Modifier,
+    navigator: WelcomeNavigator = WelcomeNavigator
+) {
 
     fun onSignInButton() {
-        onNavigate?.invoke(Destination.SignIn)
+        navigator.navigateToSignIn()
     }
 
     Column(
@@ -87,7 +89,7 @@ private fun ButtonContainer(modifier: Modifier = Modifier, onNavigate: Navigable
         Spacer(Modifier.height(12.dp))
         LinkText(
             onClick = {
-
+                navigator.navigateToSignUp()
             },
             text = stringResource(R.string.welcome_signup_button),
             linkText = stringResource(R.string.welcome_signup_button_link),
