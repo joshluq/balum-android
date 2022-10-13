@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,13 +19,15 @@ import pe.joshluq.balum.R
 import pe.joshluq.balum.Navigable
 import pe.joshluq.balum.common.navigation.Destination
 import pe.joshluq.balum.ui.theme.BalumTheme
+import pe.joshluq.balum.ui.widget.ButtonType
+import pe.joshluq.balum.ui.widget.PrimaryButton
 
 @Composable
 fun WelcomeScreen(modifier: Modifier = Modifier, onNavigate: Navigable = null) {
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colors.primary
-    ){
+    ) {
         Column(modifier = Modifier.fillMaxHeight()) {
             BalumLogo()
             ButtonContainer(onNavigate = onNavigate)
@@ -36,7 +39,7 @@ fun WelcomeScreen(modifier: Modifier = Modifier, onNavigate: Navigable = null) {
 @Composable
 fun WelcomeScreenPreview() {
     BalumTheme {
-            WelcomeScreen()
+        WelcomeScreen()
     }
 }
 
@@ -58,8 +61,9 @@ private fun BalumLogo(modifier: Modifier = Modifier) {
             modifier = Modifier.padding(top = 32.dp)
         )
         Text(
+            color = Color.White,
             text = stringResource(R.string.app_name),
-            fontSize = 40.sp
+            fontSize = 48.sp
         )
     }
 }
@@ -78,12 +82,16 @@ private fun ButtonContainer(modifier: Modifier = Modifier, onNavigate: Navigable
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom
     ) {
-        Button(onClick = ::onSignInButton) {
-            Text(text = stringResource(R.string.welcome_signin_button))
-        }
-        Button(onClick = { /*TODO*/ }) {
-            Text(text = stringResource(R.string.welcome_signup_button))
-        }
+        PrimaryButton(
+            onClick = ::onSignInButton,
+            text = stringResource(R.string.welcome_signin_button),
+            type = ButtonType.PRIMARY_WHITE,
+        )
+        PrimaryButton(
+            onClick = { /*TODO*/ },
+            text = stringResource(R.string.welcome_signup_button),
+            type = ButtonType.PRIMARY_WHITE,
+        )
     }
 }
 
