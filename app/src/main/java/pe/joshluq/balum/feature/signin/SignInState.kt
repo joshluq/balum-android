@@ -7,7 +7,7 @@ data class SignInState(
     val onSignInSuccessful: Boolean = false,
     val onSingInButtonClicked: Boolean = false,
     val onUsernameError: String = "",
-    val onPasswordError: Boolean = false,
+    val onPasswordError: String = "",
     override val isLoading: Boolean = false,
     override val showError: UiError? = null,
     override val onDismissError: Boolean = false

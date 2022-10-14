@@ -32,19 +32,21 @@ class SignInViewModel @Inject constructor(
         )
         val credential = Credential(username, password)
         signInUseCase(credential)
-            .onSuccess {
-                state = state.copy(
-                    onSignInSuccessful = true,
-                    isLoading = false
-                )
-            }
+            .onSuccess(::onSingInSuccess)
             .onFailure(::onSignInFailure)
+    }
+
+    private fun onSingInSuccess(user: User) {
+        state = state.copy(
+            onSignInSuccessful = true,
+            isLoading = false
+        )
     }
 
     private fun onSignInFailure(throwable: Throwable) = throwable
         .onInvalidFormatError(::onEmailFormatError)
         .onEmptyFieldError(::onEmailEmptyError)
-        .onDefaultError (::showMessage)
+        .onDefaultError(::showMessage)
 
     private fun showMessage(throwable: Throwable) {
         state = state.copy(
@@ -54,24 +56,58 @@ class SignInViewModel @Inject constructor(
         )
     }
 
-    private fun onEmailEmptyError() {
-        state = state.copy(
-            onSignInSuccessful = false,
-            isLoading = false,
-            onUsernameError = "error de onEmailEmptyError"
-        )
+    private fun onEmailEmptyError(field: Field) {
+        if (field == Field.EMAIL) {
+            state = state.copy(
+                onSignInSuccessful = false,
+                isLoading = false,
+                onUsernameError = resourceProvider.getString(R.string.signin_email_field_required_message)
+            )
+            return
+        }
+        if (field == Field.PASSWORD) {
+            state = state.copy(
+                onSignInSuccessful = false,
+                isLoading = false,
+                onPasswordError = resourceProvider.getString(R.string.signin_password_field_required_message)
+            )
+            return
+        }
     }
 
-    private fun onEmailFormatError() {
-        state = state.copy(
-            onSignInSuccessful = false,
-            isLoading = false,
-            onUsernameError = "error de onEmailFormatError"
-        )
+    private fun onEmailFormatError(field: Field) {
+        if (field == Field.EMAIL) {
+            state = state.copy(
+                onSignInSuccessful = false,
+                isLoading = false,
+                onUsernameError = resourceProvider.getString(R.string.signin_email_field_invalid_message)
+            )
+            return
+        }
+        if (field == Field.PASSWORD) {
+            state = state.copy(
+                onSignInSuccessful = false,
+                isLoading = false,
+                onPasswordError = resourceProvider.getString(R.string.signin_password_field_invalid_message)
+            )
+            return
+        }
     }
 
     private fun provideErrorMessage(
         resourceProvider: ResourceProvider,
         throwable: Throwable
     ) = throwable.message ?: resourceProvider.getString(R.string.default_message_error)
+
+    fun clearEmailError() {
+        state = state.copy(
+            onUsernameError = resourceProvider.getString(R.string.default_empty)
+        )
+    }
+
+    fun clearPasswordError() {
+        state = state.copy(
+            onPasswordError = resourceProvider.getString(R.string.default_empty)
+        )
+    }
 }

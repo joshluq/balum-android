@@ -13,7 +13,7 @@ val emailPattern: Pattern = compile(
             ")+"
 )
 
-inline fun String.ifEmailError(
+internal inline fun String.ifEmailError(
     field: Field = Field.EMAIL,
     defaultValue: (ValidationResult) -> Unit
 ) = when {

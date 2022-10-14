@@ -2,13 +2,20 @@
     <string name="app_name">balum</string>
     <!--    General-->
     <string name="default_message_error">Error</string>
+    <string name="default_empty"/>
     <!--    Welcome-->
     <string name="welcome_signin_button">Sign In</string>
     <string name="welcome_signup_button">Don’t have an account? Sign Up</string>
     <string name="welcome_signup_button_link">Sign Up</string>
     <string name="welcome_logo_label">Welcome to</string>
     <!--    SignIn-->
+    <string name="signin_title">Welcome back!</string>
     <string name="signin_signin_button">Sign In</string>
-    <string name="signin_signup_button">Don’t have an account?</string>
+    <string name="signin_signup_button">Don’t have an account? Sign Up</string>
+    <string name="signin_signup_button_link">Sign Up</string>
+    <string name="signin_email_field_required_message">Email is required.</string>
+    <string name="signin_email_field_invalid_message">Invalid Email. Try again</string>
+    <string name="signin_password_field_required_message">Password is required.</string>
+    <string name="signin_password_field_invalid_message">Invalid Password. Try again</string>
 
 </resources>

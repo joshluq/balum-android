@@ -3,10 +3,9 @@ package pe.joshluq.balum.feature.signin
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -14,19 +13,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import pe.joshluq.balum.R
 import pe.joshluq.balum.ui.theme.BalumTheme
 import pe.joshluq.balum.ui.theme.LightBlue1
+import pe.joshluq.balum.ui.widget.*
 
 @Composable
 fun SignInScreen(modifier: Modifier = Modifier, viewModel: SignInViewModel = hiltViewModel()) {
@@ -44,7 +43,7 @@ fun SignInScreen(modifier: Modifier = Modifier, viewModel: SignInViewModel = hil
             Form(Modifier.weight(3f), viewModel)
         }
         if (viewModel.state.isLoading) {
-            CircularProgressIndicator()
+            LoadingDialog {}
         }
     }
 }
@@ -66,9 +65,9 @@ private fun Header(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "Welcome back!",
-            fontSize = 24.sp,
-            modifier = Modifier.padding(top = 32.dp)
+            text = stringResource(R.string.signin_title),
+            modifier = Modifier.padding(top = 32.dp),
+            style = MaterialTheme.typography.h5
         )
         Image(
             painter = painterResource(id = R.drawable.img_signin),
@@ -82,19 +81,39 @@ private fun Header(modifier: Modifier = Modifier) {
 private fun Form(modifier: Modifier = Modifier, viewModel: SignInViewModel = hiltViewModel()) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val focusManager = LocalFocusManager.current
     Column(
         modifier = modifier
+            .clip(shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
             .fillMaxWidth()
             .background(Color.White)
             .padding(top = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        UsernameField(
+        EmailTextField(
             value = username,
-            onValueChange = { username = it },
-            viewModel.state.onUsernameError
+            onValueChange = { newText ->
+                viewModel.clearEmailError()
+                username = newText
+            },
+            imeAction = ImeAction.Next,
+            errorMessage = ErrorMessage(viewModel.state.onUsernameError)
         )
-        PasswordField(value = password, onValueChange = { password = it })
+        PasswordTextField(
+            value = password,
+            onValueChange = { newText ->
+                viewModel.clearPasswordError()
+                password = newText
+            },
+            imeAction = ImeAction.Done,
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    viewModel.signIn(username, password)
+                    focusManager.clearFocus()
+                }
+            ),
+            errorMessage = ErrorMessage(viewModel.state.onPasswordError)
+        )
         ButtonContainer(onClick = {
             viewModel.signIn(username, password)
         })
@@ -103,75 +122,22 @@ private fun Form(modifier: Modifier = Modifier, viewModel: SignInViewModel = hil
 
 
 @Composable
-private fun UsernameField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    textError: String = ""
-) {
-    val hasError = textError.isNotBlank()
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = {
-            Text(text = "Username")
-        },
-        isError = hasError
-    )
-    if (hasError) {
-        Text(
-            text = textError, color = MaterialTheme.colors.error,
-            style = MaterialTheme.typography.caption,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp),
-        )
-    }
-}
-
-@Composable
-private fun PasswordField(
-    value: String,
-    onValueChange: (String) -> Unit
-) {
-    var isPasswordVisible by remember { mutableStateOf(false) }
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = {
-            Text(text = "Password")
-        },
-        keyboardOptions = KeyboardOptions(
-            autoCorrect = false,
-            keyboardType = KeyboardType.Password
-        ),
-        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-        trailingIcon = {
-            IconToggleButton(
-                checked = isPasswordVisible,
-                onCheckedChange = { isPasswordVisible = it }) {
-                val icon = if (isPasswordVisible) Icons.Default.VisibilityOff
-                else Icons.Default.Visibility
-                Icon(imageVector = icon, contentDescription = null)
-            }
-        }
-    )
-}
-
-@Composable
 private fun ButtonContainer(modifier: Modifier = Modifier, onClick: () -> Unit) {
-
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(bottom = 32.dp),
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom
     ) {
-        Button(onClick = onClick) {
-            Text(text = stringResource(R.string.signin_signin_button))
-        }
-        Button(onClick = { /*TODO*/ }) {
-            Text(text = stringResource(R.string.signin_signup_button))
-        }
+        PrimaryButton(text = stringResource(R.string.signin_signin_button), onClick = onClick)
+
+        Spacer(Modifier.height(12.dp))
+        LinkText(
+            onClick = {
+
+            },
+            text = stringResource(R.string.signin_signup_button),
+            linkText = stringResource(R.string.signin_signup_button_link),
+        )
+        Spacer(Modifier.height(32.dp))
     }
 }
