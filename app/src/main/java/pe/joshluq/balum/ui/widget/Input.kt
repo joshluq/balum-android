@@ -9,10 +9,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pe.joshluq.balum.ui.theme.BalumTheme
@@ -120,6 +117,7 @@ fun EmailTextField(
                 imeAction = imeAction
             ),
             keyboardActions = keyboardActions,
+            singleLine = true,
             isError = errorMessage.isError
         )
 
@@ -146,3 +144,58 @@ fun EmailTextFieldPreview() {
         }
     }
 }
+
+@Composable
+fun NameTextField(
+    value: String,
+    label: String = "Name",
+    imeAction: ImeAction = ImeAction.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    errorMessage: ErrorMessage = ErrorMessage(),
+    onValueChange: (String) -> Unit
+) {
+    Column(
+        modifier = Modifier.padding(horizontal = 36.dp),
+    ) {
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = value,
+            onValueChange = onValueChange,
+            label = {
+                Text(text = label)
+            },
+            keyboardOptions = KeyboardOptions(
+                autoCorrect = false,
+                keyboardType = KeyboardType.Text,
+                imeAction = imeAction,
+                capitalization = KeyboardCapitalization.Words
+            ),
+            keyboardActions = keyboardActions,
+            singleLine = true,
+            isError = errorMessage.isError
+        )
+
+        if (errorMessage.isError) {
+            Text(
+                text = errorMessage.value,
+                color = MaterialTheme.colors.error,
+                style = MaterialTheme.typography.caption,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp),
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun NameTextFieldPreview() {
+    BalumTheme {
+        Column {
+            NameTextField("") {}
+            NameTextField("", errorMessage = ErrorMessage("Error")) {}
+        }
+    }
+}
+

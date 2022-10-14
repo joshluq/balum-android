@@ -1,16 +1,14 @@
-package pe.joshluq.balum.feature.signin
+package pe.joshluq.balum.feature.signup
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,19 +19,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import pe.joshluq.balum.R
-import pe.joshluq.balum.common.navigation.SignInNavigator
+import pe.joshluq.balum.common.navigation.SignUpNavigator
 import pe.joshluq.balum.ui.theme.BalumTheme
 import pe.joshluq.balum.ui.theme.LightBlue1
 import pe.joshluq.balum.ui.widget.*
 
 @Composable
-fun SignInScreen(
-    modifier: Modifier = Modifier,
-    viewModel: SignInViewModel = hiltViewModel(),
-    navigator: SignInNavigator = SignInNavigator
-) {
+fun SignUpScreen(modifier: Modifier = Modifier, navigator: SignUpNavigator = SignUpNavigator) {
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
@@ -45,22 +38,18 @@ fun SignInScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Header(Modifier.weight(2f))
-            Form(Modifier.weight(3f), viewModel, navigator)
-        }
-        if (viewModel.state.isLoading) {
-            LoadingDialog {}
+            Form(Modifier.weight(4f), navigator)
         }
     }
 }
 
 @Preview
 @Composable
-fun SignInScreenPreview() {
+private fun SignUpScreenPreview() {
     BalumTheme {
-        SignInScreen()
+        SignUpScreen()
     }
 }
-
 
 @Composable
 private fun Header(modifier: Modifier = Modifier) {
@@ -70,12 +59,12 @@ private fun Header(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = stringResource(R.string.signin_title),
+            text = stringResource(R.string.signup_title),
             modifier = Modifier.padding(top = 32.dp),
             style = MaterialTheme.typography.h5
         )
         Image(
-            painter = painterResource(id = R.drawable.img_signin),
+            painter = painterResource(id = R.drawable.img_signup),
             contentDescription = null,
             modifier = Modifier.padding(top = 32.dp)
         )
@@ -83,12 +72,10 @@ private fun Header(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun Form(
-    modifier: Modifier = Modifier,
-    viewModel: SignInViewModel = hiltViewModel(),
-    navigator: SignInNavigator = SignInNavigator,
-) {
-    var username by remember { mutableStateOf("") }
+private fun Form(modifier: Modifier = Modifier, navigator: SignUpNavigator = SignUpNavigator) {
+    var name by remember { mutableStateOf("") }
+    var lastname by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
     Column(
@@ -99,36 +86,54 @@ private fun Form(
             .padding(top = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        EmailTextField(
-            value = username,
+        NameTextField(
+            value = name,
+            label = stringResource(R.string.signup_name_label),
             onValueChange = { newText ->
-                viewModel.clearEmailError()
-                username = newText
+
+                name = newText
             },
             imeAction = ImeAction.Next,
-            errorMessage = ErrorMessage(viewModel.state.onUsernameError)
-        )
+
+            )
+        NameTextField(
+            value = lastname,
+            label = stringResource(R.string.signup_lastname_label),
+            onValueChange = { newText ->
+
+                lastname = newText
+            },
+            imeAction = ImeAction.Next,
+
+            )
+        EmailTextField(
+            value = email,
+            onValueChange = { newText ->
+
+                email = newText
+            },
+            imeAction = ImeAction.Next,
+
+            )
         PasswordTextField(
             value = password,
             onValueChange = { newText ->
-                viewModel.clearPasswordError()
+
                 password = newText
             },
             imeAction = ImeAction.Done,
             keyboardActions = KeyboardActions(
                 onDone = {
-                    viewModel.signIn(username, password)
                     focusManager.clearFocus()
                 }
             ),
-            errorMessage = ErrorMessage(viewModel.state.onPasswordError)
         )
         ButtonContainer(
-            onSignInButtonClick = {
-                viewModel.signIn(username, password)
+            onSignUpButtonClick = {
+
             },
-            onSignUpLinkClick = {
-                navigator.navigateToSignUp()
+            onSignInLinkClick = {
+                navigator.navigateToSignIn()
             }
         )
     }
@@ -138,8 +143,8 @@ private fun Form(
 @Composable
 private fun ButtonContainer(
     modifier: Modifier = Modifier,
-    onSignInButtonClick: () -> Unit,
-    onSignUpLinkClick: () -> Unit,
+    onSignUpButtonClick: () -> Unit,
+    onSignInLinkClick: () -> Unit,
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
@@ -147,16 +152,17 @@ private fun ButtonContainer(
         verticalArrangement = Arrangement.Bottom
     ) {
         PrimaryButton(
-            text = stringResource(R.string.signin_signin_button),
-            onClick = onSignInButtonClick
+            text = stringResource(R.string.signup_signup_button),
+            onClick = onSignUpButtonClick
         )
+
         Spacer(Modifier.height(12.dp))
         LinkText(
             onClick = {
-                onSignUpLinkClick()
+                onSignInLinkClick()
             },
-            text = stringResource(R.string.signin_signup_button),
-            linkText = stringResource(R.string.signin_signup_button_link),
+            text = stringResource(R.string.signup_signin_button),
+            linkText = stringResource(R.string.signup_signin_button_link),
         )
         Spacer(Modifier.height(32.dp))
     }
