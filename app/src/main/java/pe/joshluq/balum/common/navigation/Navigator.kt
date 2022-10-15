@@ -33,6 +33,8 @@ interface SignInNavigator {
 
     fun navigateToSignUp()
 
+    fun navigateToForgotPassword()
+
     companion object : SignInNavigator {
 
         private var navigationActions: NavigationActions? = null
@@ -47,6 +49,10 @@ interface SignInNavigator {
                 popUpTo(Destination.Welcome.route) { inclusive = false }
             }
             navigationActions?.navigateToSignUp(options)
+        }
+
+        override fun navigateToForgotPassword() {
+            navigationActions?.navigateToForgotPassword()
         }
 
     }

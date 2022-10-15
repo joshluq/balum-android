@@ -123,6 +123,22 @@ private fun Form(
             ),
             errorMessage = ErrorMessage(viewModel.state.onPasswordError)
         )
+        Spacer(Modifier.height(8.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 36.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            LinkText(
+                text = stringResource(R.string.signin_forgot_password_link),
+                linkText = stringResource(R.string.signin_forgot_password_link),
+                onClick = {
+
+                }
+            )
+        }
+
         ButtonContainer(
             onSignInButtonClick = {
                 viewModel.signIn(username, password)
