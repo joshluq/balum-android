@@ -1,3 +1,3 @@
 package pe.joshluq.balum.domain.model
 
-data class Credential(val username: String, val password: String)
+data class Credential(val username: String = String(), val password: String)

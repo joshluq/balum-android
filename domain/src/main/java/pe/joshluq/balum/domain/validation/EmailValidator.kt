@@ -21,4 +21,3 @@ internal inline fun String.ifEmailError(
     matches(emailPattern.toRegex()).not() -> defaultValue(ValidationResult.InvalidFormat(field))
     else -> Unit
 }
-

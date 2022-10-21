@@ -26,5 +26,13 @@
     <string name="signup_signin_button_link">Sign In</string>
     <string name="signup_name_label">First Name</string>
     <string name="signup_lastname_label">Last Name</string>
+    <string name="signup_name_field_required_message">Name is required.</string>
+    <string name="signup_name_field_invalid_message">Invalid Name. Try again</string>
+    <string name="signup_lastname_field_required_message">Last name is required.</string>
+    <string name="signup_lastname_field_invalid_message">Invalid Last name. Try again</string>
+    <string name="signup_email_field_required_message">Email is required.</string>
+    <string name="signup_email_field_invalid_message">Invalid Email. Try again</string>
+    <string name="signup_password_field_required_message">Password is required.</string>
+    <string name="signup_password_field_invalid_message">Invalid Password. Try again</string>
 
 </resources>

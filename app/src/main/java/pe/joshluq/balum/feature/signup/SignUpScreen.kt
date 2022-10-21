@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import pe.joshluq.balum.R
 import pe.joshluq.balum.common.navigation.SignUpNavigator
 import pe.joshluq.balum.ui.theme.BalumTheme
@@ -26,7 +27,11 @@ import pe.joshluq.balum.ui.theme.LightBlue1
 import pe.joshluq.balum.ui.widget.*
 
 @Composable
-fun SignUpScreen(modifier: Modifier = Modifier, navigator: SignUpNavigator = SignUpNavigator) {
+fun SignUpScreen(
+    modifier: Modifier = Modifier,
+    viewModel: SignUpViewModel = hiltViewModel(),
+    navigator: SignUpNavigator = SignUpNavigator
+) {
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
@@ -38,7 +43,16 @@ fun SignUpScreen(modifier: Modifier = Modifier, navigator: SignUpNavigator = Sig
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Header(Modifier.weight(2f))
-            Form(Modifier.weight(4f), navigator)
+            Form(Modifier.weight(4f), viewModel, navigator)
+        }
+        if (viewModel.state is SignUpState.LoadingState) {
+            LoadingDialog {}
+        }
+        val message = (viewModel.state as? SignUpState.ErrorState)?.message.orEmpty()
+        if (message.isNotBlank()) {
+            SimpleDialog(description = message) {
+                viewModel.clearError()
+            }
         }
     }
 }
@@ -72,7 +86,11 @@ private fun Header(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun Form(modifier: Modifier = Modifier, navigator: SignUpNavigator = SignUpNavigator) {
+private fun Form(
+    modifier: Modifier = Modifier,
+    viewModel: SignUpViewModel,
+    navigator: SignUpNavigator = SignUpNavigator
+) {
     var name by remember { mutableStateOf("") }
     var lastname by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -86,39 +104,45 @@ private fun Form(modifier: Modifier = Modifier, navigator: SignUpNavigator = Sig
             .padding(top = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        val nameMessage = (viewModel.state as? SignUpState.NameErrorState)?.message.orEmpty()
+        val lastNameMessage =
+            (viewModel.state as? SignUpState.LastNameErrorState)?.message.orEmpty()
+        val emailMessage = (viewModel.state as? SignUpState.EmailErrorState)?.message.orEmpty()
+        val passwordMessage =
+            (viewModel.state as? SignUpState.PasswordErrorState)?.message.orEmpty()
         NameTextField(
             value = name,
             label = stringResource(R.string.signup_name_label),
             onValueChange = { newText ->
-
+                viewModel.clearError()
                 name = newText
             },
             imeAction = ImeAction.Next,
-
-            )
+            errorMessage = ErrorMessage(nameMessage)
+        )
         NameTextField(
             value = lastname,
             label = stringResource(R.string.signup_lastname_label),
             onValueChange = { newText ->
-
+                viewModel.clearError()
                 lastname = newText
             },
             imeAction = ImeAction.Next,
-
-            )
+            errorMessage = ErrorMessage(lastNameMessage)
+        )
         EmailTextField(
             value = email,
             onValueChange = { newText ->
-
+                viewModel.clearError()
                 email = newText
             },
             imeAction = ImeAction.Next,
-
-            )
+            errorMessage = ErrorMessage(emailMessage)
+        )
         PasswordTextField(
             value = password,
             onValueChange = { newText ->
-
+                viewModel.clearError()
                 password = newText
             },
             imeAction = ImeAction.Done,
@@ -127,10 +151,11 @@ private fun Form(modifier: Modifier = Modifier, navigator: SignUpNavigator = Sig
                     focusManager.clearFocus()
                 }
             ),
+            errorMessage = ErrorMessage(passwordMessage)
         )
         ButtonContainer(
             onSignUpButtonClick = {
-
+                viewModel.createAccount(name, lastname, email, password)
             },
             onSignInLinkClick = {
                 navigator.navigateToSignIn()

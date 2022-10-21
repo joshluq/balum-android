@@ -9,9 +9,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import pe.joshluq.balum.R
 import pe.joshluq.balum.common.resource.ResourceProvider
+import pe.joshluq.balum.common.resource.provideErrorMessage
 import pe.joshluq.balum.common.uimodel.UiError
 import pe.joshluq.balum.domain.model.Credential
 import pe.joshluq.balum.domain.model.User
+import pe.joshluq.balum.domain.usecase.SignInUseCase
 import pe.joshluq.balum.domain.usecase.UseCase
 import pe.joshluq.balum.domain.validation.*
 import javax.inject.Inject
@@ -19,7 +21,7 @@ import javax.inject.Named
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    @Named("signInUseCase") private val signInUseCase: UseCase<Credential, User>,
+    @Named("signInUseCase") private val signInUseCase: UseCase<SignInUseCase.Params, User>,
     private val resourceProvider: ResourceProvider
 ) : ViewModel() {
 
@@ -31,7 +33,8 @@ class SignInViewModel @Inject constructor(
             isLoading = true
         )
         val credential = Credential(username, password)
-        signInUseCase(credential)
+        val params = SignInUseCase.Params(credential)
+        signInUseCase(params)
             .onSuccess(::onSingInSuccess)
             .onFailure(::onSignInFailure)
     }
@@ -44,8 +47,8 @@ class SignInViewModel @Inject constructor(
     }
 
     private fun onSignInFailure(throwable: Throwable) = throwable
-        .onInvalidFormatError(::onEmailFormatError)
-        .onEmptyFieldError(::onEmailEmptyError)
+        .onInvalidFormatError(::onFieldFormatError)
+        .onEmptyFieldError(::onFieldEmptyError)
         .onDefaultError(::showMessage)
 
     private fun showMessage(throwable: Throwable) {
@@ -56,7 +59,7 @@ class SignInViewModel @Inject constructor(
         )
     }
 
-    private fun onEmailEmptyError(field: Field) {
+    private fun onFieldEmptyError(field: Field) {
         if (field == Field.EMAIL) {
             state = state.copy(
                 onSignInSuccessful = false,
@@ -75,7 +78,7 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    private fun onEmailFormatError(field: Field) {
+    private fun onFieldFormatError(field: Field) {
         if (field == Field.EMAIL) {
             state = state.copy(
                 onSignInSuccessful = false,
@@ -93,11 +96,6 @@ class SignInViewModel @Inject constructor(
             return
         }
     }
-
-    private fun provideErrorMessage(
-        resourceProvider: ResourceProvider,
-        throwable: Throwable
-    ) = throwable.message ?: resourceProvider.getString(R.string.default_message_error)
 
     fun clearEmailError() {
         state = state.copy(
