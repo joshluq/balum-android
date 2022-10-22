@@ -1,14 +1,15 @@
 package pe.joshluq.balum.feature.signin
 
-import pe.joshluq.balum.common.state.LoadingState
-import pe.joshluq.balum.common.uimodel.UiError
+sealed interface SignInState
 
-data class SignInState(
-    val onSignInSuccessful: Boolean = false,
-    val onSingInButtonClicked: Boolean = false,
-    val onUsernameError: String = "",
-    val onPasswordError: String = "",
-    override val isLoading: Boolean = false,
-    override val showError: UiError? = null,
-    override val onDismissError: Boolean = false
-) : LoadingState
+object InitialState : SignInState
+
+object LoadingState : SignInState
+
+object SignInSuccessfulState : SignInState
+
+class ErrorState(val message: String) : SignInState
+
+class EmailErrorState(val message: String) : SignInState
+
+class PasswordErrorState(val message: String) : SignInState

@@ -28,12 +28,12 @@ class SignUpViewModel @Inject constructor(
     private val resourceProvider: ResourceProvider
 ) : ViewModel() {
 
-    var state by mutableStateOf<SignUpState>(SignUpState.InitialState)
+    var state by mutableStateOf<SignUpState>(InitialState)
         private set
 
     fun createAccount(name: String, lastname: String, email: String, password: String) =
         viewModelScope.launch {
-            state = SignUpState.LoadingState
+            state = LoadingState
             val profile = Profile(name, lastname, email)
             val credential = Credential(password = password)
             val params = SignUpUseCase.Params(profile, credential)
@@ -43,7 +43,7 @@ class SignUpViewModel @Inject constructor(
         }
 
     private fun onSingInSuccess(user: User) {
-        state = SignUpState.CreateUserSuccessfulState
+        state = CreateUserSuccessfulState
     }
 
     private fun onSignInFailure(throwable: Throwable) = throwable
@@ -52,41 +52,41 @@ class SignUpViewModel @Inject constructor(
         .onDefaultError(::showMessage)
 
     private fun showMessage(throwable: Throwable) {
-        state = SignUpState.ErrorState(provideErrorMessage(resourceProvider, throwable))
+        state = ErrorState(provideErrorMessage(resourceProvider, throwable))
     }
 
     private fun onFieldEmptyError(field: Field) {
         if (field == Field.NAME) {
-            state = SignUpState.NameErrorState(resourceProvider.getString(R.string.signup_name_field_required_message))
+            state = NameErrorState(resourceProvider.getString(R.string.signup_name_field_required_message))
             return
         }
         if (field == Field.LAST_NAME) {
-            state = SignUpState.LastNameErrorState(resourceProvider.getString(R.string.signup_lastname_field_required_message))
+            state = LastNameErrorState(resourceProvider.getString(R.string.signup_lastname_field_required_message))
             return
         }
         if (field == Field.EMAIL) {
-            state = SignUpState.EmailErrorState(resourceProvider.getString(R.string.signup_email_field_required_message))
+            state = EmailErrorState(resourceProvider.getString(R.string.signup_email_field_required_message))
             return
         }
         if (field == Field.PASSWORD) {
-            state = SignUpState.PasswordErrorState(resourceProvider.getString(R.string.signup_password_field_required_message))
+            state = PasswordErrorState(resourceProvider.getString(R.string.signup_password_field_required_message))
             return
         }
     }
 
     private fun onFieldFormatError(field: Field) {
         if (field == Field.EMAIL) {
-            state = SignUpState.EmailErrorState(resourceProvider.getString(R.string.signup_email_field_required_message))
+            state = EmailErrorState(resourceProvider.getString(R.string.signup_email_field_required_message))
             return
         }
         if (field == Field.PASSWORD) {
-            state = SignUpState.PasswordErrorState(resourceProvider.getString(R.string.signup_password_field_required_message))
+            state = PasswordErrorState(resourceProvider.getString(R.string.signup_password_field_required_message))
             return
         }
     }
 
     fun clearError() {
-        state = SignUpState.InitialState
+        state = InitialState
     }
 
 }

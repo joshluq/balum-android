@@ -45,10 +45,10 @@ fun SignUpScreen(
             Header(Modifier.weight(2f))
             Form(Modifier.weight(4f), viewModel, navigator)
         }
-        if (viewModel.state is SignUpState.LoadingState) {
+        if (viewModel.state is LoadingState) {
             LoadingDialog {}
         }
-        val message = (viewModel.state as? SignUpState.ErrorState)?.message.orEmpty()
+        val message = (viewModel.state as? ErrorState)?.message.orEmpty()
         if (message.isNotBlank()) {
             SimpleDialog(description = message) {
                 viewModel.clearError()
@@ -104,12 +104,12 @@ private fun Form(
             .padding(top = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        val nameMessage = (viewModel.state as? SignUpState.NameErrorState)?.message.orEmpty()
+        val nameMessage = (viewModel.state as? NameErrorState)?.message.orEmpty()
         val lastNameMessage =
-            (viewModel.state as? SignUpState.LastNameErrorState)?.message.orEmpty()
-        val emailMessage = (viewModel.state as? SignUpState.EmailErrorState)?.message.orEmpty()
+            (viewModel.state as? LastNameErrorState)?.message.orEmpty()
+        val emailMessage = (viewModel.state as? EmailErrorState)?.message.orEmpty()
         val passwordMessage =
-            (viewModel.state as? SignUpState.PasswordErrorState)?.message.orEmpty()
+            (viewModel.state as? PasswordErrorState)?.message.orEmpty()
         NameTextField(
             value = name,
             label = stringResource(R.string.signup_name_label),

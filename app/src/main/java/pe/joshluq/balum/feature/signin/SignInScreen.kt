@@ -47,8 +47,14 @@ fun SignInScreen(
             Header(Modifier.weight(2f))
             Form(Modifier.weight(3f), viewModel, navigator)
         }
-        if (viewModel.state.isLoading) {
+        if (viewModel.state is LoadingState) {
             LoadingDialog {}
+        }
+        val message = (viewModel.state as? ErrorState)?.message.orEmpty()
+        if (message.isNotBlank()) {
+            SimpleDialog(description = message) {
+                viewModel.clearError()
+            }
         }
     }
 }
@@ -99,19 +105,21 @@ private fun Form(
             .padding(top = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        val emailMessage = (viewModel.state as? EmailErrorState)?.message.orEmpty()
+        val passwordMessage = (viewModel.state as? PasswordErrorState)?.message.orEmpty()
         EmailTextField(
             value = username,
             onValueChange = { newText ->
-                viewModel.clearEmailError()
+                viewModel.clearError()
                 username = newText
             },
             imeAction = ImeAction.Next,
-            errorMessage = ErrorMessage(viewModel.state.onUsernameError)
+            errorMessage = ErrorMessage(emailMessage)
         )
         PasswordTextField(
             value = password,
             onValueChange = { newText ->
-                viewModel.clearPasswordError()
+                viewModel.clearError()
                 password = newText
             },
             imeAction = ImeAction.Done,
@@ -121,7 +129,7 @@ private fun Form(
                     focusManager.clearFocus()
                 }
             ),
-            errorMessage = ErrorMessage(viewModel.state.onPasswordError)
+            errorMessage = ErrorMessage(passwordMessage)
         )
         Spacer(Modifier.height(8.dp))
         Row(
