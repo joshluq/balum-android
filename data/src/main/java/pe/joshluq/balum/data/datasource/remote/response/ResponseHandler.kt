@@ -11,16 +11,16 @@ suspend fun <T> handleResponse(
 
     when {
         result.isSuccessful.not() -> {
-            Result.failure(Throwable(""))
+            Result.failure(Throwable())
         }
         result.body()?.error != null -> {
-            Result.failure(Throwable(result.body()!!.error!!.message))
+            Result.failure(Throwable(result.body()?.error?.message))
         }
         result.body()?.data != null -> {
             Result.success(result.body()!!.data!!)
         }
         else -> {
-            Result.failure(Throwable(""))
+            Result.failure(Throwable())
         }
     }
 

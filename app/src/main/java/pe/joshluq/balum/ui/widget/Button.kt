@@ -1,12 +1,10 @@
 package pe.joshluq.balum.ui.widget
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,7 +14,13 @@ import pe.joshluq.balum.ui.theme.BalumTheme
 
 enum class ButtonType {
     PRIMARY,
-    PRIMARY_WHITE,
+    SECONDARY,
+    WHITE,
+}
+
+enum class ButtonBody {
+    DEFAULT,
+    FIT,
 }
 
 @Composable
@@ -25,23 +29,37 @@ fun PrimaryButton(
     modifier: Modifier = Modifier,
     text: String = "",
     enabled: Boolean = true,
-    type: ButtonType = ButtonType.PRIMARY
+    type: ButtonType = ButtonType.PRIMARY,
+    body: ButtonBody = ButtonBody.DEFAULT,
 ) {
 
     val buttonColors = when (type) {
-        ButtonType.PRIMARY -> ButtonDefaults.buttonColors(contentColor = MaterialTheme.colors.primary)
-        ButtonType.PRIMARY_WHITE -> ButtonDefaults.outlinedButtonColors(
+        ButtonType.PRIMARY -> ButtonDefaults.buttonColors()
+        ButtonType.SECONDARY -> ButtonDefaults.outlinedButtonColors(
             contentColor = Color.White
         )
+        ButtonType.WHITE -> ButtonDefaults.buttonColors(backgroundColor = Color.White)
     }
 
     val textColors = when (type) {
         ButtonType.PRIMARY -> Color.White
-        ButtonType.PRIMARY_WHITE -> MaterialTheme.colors.primary
+        ButtonType.SECONDARY -> MaterialTheme.colors.primary
+        ButtonType.WHITE -> MaterialTheme.colors.primary
+    }
+
+    val elevation = when (type) {
+        ButtonType.WHITE -> ButtonDefaults.elevation(
+            defaultElevation = 0.dp,
+            pressedElevation = 8.dp,
+            disabledElevation = 0.dp,
+            hoveredElevation = 0.dp,
+            focusedElevation = 0.dp,
+        )
+        else -> ButtonDefaults.elevation()
     }
 
     val border = when (type) {
-        ButtonType.PRIMARY_WHITE -> BorderStroke(1.dp, MaterialTheme.colors.primary)
+        ButtonType.SECONDARY -> BorderStroke(1.dp, MaterialTheme.colors.primary)
         else -> null
     }
 
@@ -51,9 +69,14 @@ fun PrimaryButton(
         shape = RoundedCornerShape(20.dp),
         colors = buttonColors,
         border = border,
+        elevation = elevation,
         enabled = enabled,
     ) {
-        Text(text = text, modifier = modifier.padding(horizontal = 24.dp), color = textColors)
+        val padding = when (body) {
+            ButtonBody.FIT -> 0.dp
+            else -> 20.dp
+        }
+        Text(text = text, modifier = modifier.padding(horizontal = padding), color = textColors)
     }
 }
 
@@ -62,6 +85,11 @@ fun PrimaryButton(
 @Composable
 fun PrimaryButtonPreview() {
     BalumTheme {
-        PrimaryButton(text = "Primary Button", onClick = {})
+        Column {
+            PrimaryButton(text = "Primary Button", onClick = {})
+            PrimaryButton(text = "Secondary Button", onClick = {}, type = ButtonType.SECONDARY)
+            PrimaryButton(text = "White Button", onClick = {}, type = ButtonType.WHITE)
+            PrimaryButton(text = "White Button", onClick = {}, type = ButtonType.WHITE, body = ButtonBody.FIT)
+        }
     }
 }

@@ -84,7 +84,7 @@ private fun ButtonContainer(
         PrimaryButton(
             onClick = ::onSignInButton,
             text = stringResource(R.string.welcome_signin_button),
-            type = ButtonType.PRIMARY_WHITE,
+            type = ButtonType.SECONDARY,
         )
         Spacer(Modifier.height(12.dp))
         LinkText(

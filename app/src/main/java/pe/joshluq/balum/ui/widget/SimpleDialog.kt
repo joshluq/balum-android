@@ -20,7 +20,7 @@ import pe.joshluq.balum.ui.theme.BalumTheme
 fun SimpleDialog(
     title: String = "",
     description: String = "",
-    buttonText: String = "Entendido",
+    buttonText: String = "Ok",
     onDismiss: () -> Unit
 ) {
     Dialog(
@@ -40,12 +40,15 @@ fun SimpleDialog(
                     .background(Color.White)
                     .padding(12.dp)
             ) {
+
+                Spacer(modifier = Modifier.height(8.dp))
+
                 if (title.isNotBlank()) {
                     Text(
                         text = title,
                         style = MaterialTheme.typography.h5,
                         modifier = Modifier
-                            .padding(16.dp), textAlign = TextAlign.Center
+                            .padding(8.dp), textAlign = TextAlign.Center
                     )
                 }
 
@@ -64,6 +67,8 @@ fun SimpleDialog(
                 ) {
                     PrimaryButton(
                         text = buttonText,
+                        type = ButtonType.WHITE,
+                        body = ButtonBody.FIT,
                         onClick = onDismiss
                     )
                 }
@@ -76,8 +81,11 @@ fun SimpleDialog(
 @Composable
 fun SimpleDialogPreview() {
     BalumTheme {
-        SimpleDialog(description = "Description") {
 
+        Column {
+            SimpleDialog(title = "title", description = "Description") {
+
+            }
         }
     }
 }
