@@ -15,6 +15,11 @@ val Typography = Typography(
         fontWeight = FontWeight.W600,
         fontSize = 14.sp
     ),
+    h5 = TextStyle(
+        fontWeight = FontWeight.W600,
+        fontSize = 24.sp,
+        letterSpacing = 0.sp
+    )
     /* Other default text styles to override
 
     caption = TextStyle(

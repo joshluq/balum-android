@@ -19,6 +19,10 @@ sealed class Destination(val route: String) {
 
 class NavigationActions(private val navController: NavHostController) {
 
+    fun navigateToBack(){
+        navController.popBackStack()
+    }
+
     fun navigateToSignIn(navOptions: NavOptions? = null) {
         navController.navigate(Destination.SignIn.route, navOptions)
     }
@@ -28,6 +32,6 @@ class NavigationActions(private val navController: NavHostController) {
     }
 
     fun navigateToForgotPassword(navOptions: NavOptions? = null) {
-
+        navController.navigate(Destination.ForgotPassword.route, navOptions)
     }
 }

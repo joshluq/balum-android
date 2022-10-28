@@ -27,9 +27,23 @@ class SignInViewModel @Inject constructor(
     var state by mutableStateOf<SignInState>(InitialState)
         private set
 
-    fun signIn(username: String, password: String) = viewModelScope.launch {
+    var email by mutableStateOf("")
+        private set
+
+    var password by mutableStateOf("")
+        private set
+
+    fun updateUsername(input: String) {
+        email = input
+    }
+
+    fun updatePassword(input: String) {
+        password = input
+    }
+
+    fun signIn() = viewModelScope.launch {
         state = LoadingState
-        val credential = Credential(username, password)
+        val credential = Credential(email, password)
         val params = SignInUseCase.Params(credential)
         signInUseCase(params)
             .onSuccess(::onSingInSuccess)

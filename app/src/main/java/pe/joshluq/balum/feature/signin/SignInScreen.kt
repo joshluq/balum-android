@@ -91,11 +91,9 @@ private fun Header(modifier: Modifier = Modifier) {
 @Composable
 private fun Form(
     modifier: Modifier = Modifier,
-    viewModel: SignInViewModel = hiltViewModel(),
+    viewModel: SignInViewModel,
     navigator: SignInNavigator = SignInNavigator,
 ) {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
     Column(
         modifier = modifier
@@ -108,48 +106,48 @@ private fun Form(
         val emailMessage = (viewModel.state as? EmailErrorState)?.message.orEmpty()
         val passwordMessage = (viewModel.state as? PasswordErrorState)?.message.orEmpty()
         EmailTextField(
-            value = username,
-            onValueChange = { newText ->
+            value = viewModel.email,
+            onValueChange = { newValue ->
                 viewModel.clearError()
-                username = newText
+                viewModel.updateUsername(newValue)
             },
             imeAction = ImeAction.Next,
             errorMessage = ErrorMessage(emailMessage)
         )
         PasswordTextField(
-            value = password,
-            onValueChange = { newText ->
+            value = viewModel.password,
+            onValueChange = { newValue ->
                 viewModel.clearError()
-                password = newText
+                viewModel.updatePassword(newValue)
             },
             imeAction = ImeAction.Done,
             keyboardActions = KeyboardActions(
                 onDone = {
-                    viewModel.signIn(username, password)
+                    viewModel.signIn()
                     focusManager.clearFocus()
                 }
             ),
             errorMessage = ErrorMessage(passwordMessage)
         )
-        Spacer(Modifier.height(8.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 36.dp),
+                .padding(horizontal = 28.dp),
             horizontalArrangement = Arrangement.End
         ) {
-            LinkText(
+            PrimaryButton(
                 text = stringResource(R.string.signin_forgot_password_link),
-                linkText = stringResource(R.string.signin_forgot_password_link),
+                type = ButtonType.WHITE,
+                body = ButtonBody.FIT,
                 onClick = {
-
+                    navigator.navigateToForgotPassword()
                 }
             )
         }
 
         ButtonContainer(
             onSignInButtonClick = {
-                viewModel.signIn(username, password)
+                viewModel.signIn()
             },
             onSignUpLinkClick = {
                 navigator.navigateToSignUp()

@@ -35,4 +35,9 @@
     <string name="signup_password_field_required_message">Password is required.</string>
     <string name="signup_password_field_invalid_message">Invalid Password. Try again</string>
 
+    <!--    Credential Recovery-->
+    <string name="credentialrecovery_title">Forgot Password?</string>
+    <string name="credentialrecovery_subtitle">Enter your registrated email address to receive password reset instruction.</string>
+    <string name="credentialrecovery_button">Reset Password</string>
+
 </resources>

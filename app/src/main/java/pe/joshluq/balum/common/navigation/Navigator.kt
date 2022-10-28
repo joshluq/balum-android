@@ -3,7 +3,7 @@ package pe.joshluq.balum.common.navigation
 import androidx.navigation.navOptions
 
 
-interface WelcomeNavigator {
+sealed interface WelcomeNavigator {
 
     fun navigateToSignIn()
 
@@ -29,7 +29,7 @@ interface WelcomeNavigator {
     }
 }
 
-interface SignInNavigator {
+sealed interface SignInNavigator {
 
     fun navigateToSignUp()
 
@@ -58,7 +58,7 @@ interface SignInNavigator {
     }
 }
 
-interface SignUpNavigator {
+sealed interface SignUpNavigator {
 
     fun navigateToSignIn()
 
@@ -76,5 +76,24 @@ interface SignUpNavigator {
             }
             navigationActions?.navigateToSignIn(options)
         }
+    }
+}
+
+sealed interface CredentialRecoveryNavigator {
+
+    fun navigateToBack()
+
+    companion object : CredentialRecoveryNavigator {
+        private var navigationActions: NavigationActions? = null
+
+        fun build(navigationActions: NavigationActions): CredentialRecoveryNavigator {
+            this.navigationActions = navigationActions
+            return this
+        }
+
+        override fun navigateToBack() {
+            navigationActions?.navigateToBack()
+        }
+
     }
 }

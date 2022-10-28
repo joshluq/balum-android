@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import pe.joshluq.balum.feature.credentialrecovery.CredentialRecoveryScreen
 import pe.joshluq.balum.feature.signin.SignInScreen
 import pe.joshluq.balum.feature.signup.SignUpScreen
 import pe.joshluq.balum.feature.welcome.WelcomeScreen
@@ -24,6 +25,7 @@ fun NavGraph(
     val welcomeNavigator = WelcomeNavigator.build(navAction)
     val signInNavigator = SignInNavigator.build(navAction)
     val signUpNavigator = SignUpNavigator.build(navAction)
+    val credentialRecoveryNavigator = CredentialRecoveryNavigator.build(navAction)
 
     NavHost(
         navController = navController,
@@ -46,6 +48,12 @@ fun NavGraph(
             SignUpScreen(
                 modifier = modifier,
                 navigator = signUpNavigator
+            )
+        }
+        composable(Destination.ForgotPassword.route) {
+            CredentialRecoveryScreen(
+                modifier = modifier,
+                navigator = credentialRecoveryNavigator
             )
         }
     }
