@@ -1,6 +1,5 @@
 package pe.joshluq.balum.data.repository
 
-
 import pe.joshluq.balum.data.datasource.remote.ApiService
 import pe.joshluq.balum.data.datasource.remote.mapper.mapToUser
 import pe.joshluq.balum.data.datasource.remote.request.user.SignInRequest
@@ -18,11 +17,11 @@ class DataUserRepository @Inject constructor(
     private val api: ApiService,
 ) : UserRepository {
 
-    override suspend fun authenticate(credentials: Credential) = handleResponse {
+    override suspend fun authenticateUser(credentials: Credential) = handleResponse {
         api.authenticateAsync(SignInRequest(credentials.username, credentials.password))
     }.map(SignInResponse::token)
 
-    override suspend fun create(profile: Profile, credentials: Credential) = handleResponse {
+    override suspend fun createUser(profile: Profile, credentials: Credential) = handleResponse {
         api.createUserAsync(
             SignUpRequest(profile.name, profile.lastName, profile.email, credentials.password)
         )
@@ -32,4 +31,7 @@ class DataUserRepository @Inject constructor(
         api.getUserAsync()
     }.map(::mapToUser)
 
+    override suspend fun recoverCredential(email: String) = handleResponse {
+        api.userRecoveryAsync()
+    }
 }

@@ -16,7 +16,7 @@ class AuthenticateUserUseCase @Inject constructor(
     override suspend fun invoke(params: Params) = withContext(Dispatchers.IO) {
         return@withContext try {
             validateCredential(params.credential)
-            userRepository.authenticate(params.credential).mapCatching { token ->
+            userRepository.authenticateUser(params.credential).mapCatching { token ->
                 token ?: throw NullPointerException()
             }
         } catch (validationResult: Throwable) {

@@ -23,4 +23,7 @@ interface ApiService {
     @GET("user")
     fun getUserAsync(): Deferred<Response<BaseResponse<UserResponse>>>
 
+    @GET("user/recovery")
+    fun userRecoveryAsync(): Deferred<Response<BaseResponse<Unit>>>
+
 }

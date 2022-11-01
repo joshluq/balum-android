@@ -19,7 +19,7 @@ class CreateUserUseCase @Inject constructor(
         return@withContext try {
             validateProfile(params.profile)
             validateCredential(params.credential)
-            userRepository.create(params.profile, params.credential).mapCatching { token ->
+            userRepository.createUser(params.profile, params.credential).mapCatching { token ->
                 token ?: throw NullPointerException()
             }
         } catch (validationResult: Throwable) {

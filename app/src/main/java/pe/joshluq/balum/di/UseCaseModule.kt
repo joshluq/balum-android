@@ -39,4 +39,9 @@ abstract class UseCaseModule {
     @Named("signUpUseCase")
     abstract fun bindSignUpUseCase(useCase: SignUpUseCase): UseCase<SignUpUseCase.Params, User>
 
+    @Singleton
+    @Binds
+    @Named("recoverCredentialUseCase")
+    abstract fun bindRecoverCredentialUseCase(useCase: RecoverCredentialUseCase): UseCase<RecoverCredentialUseCase.Params, Unit>
+
 }
