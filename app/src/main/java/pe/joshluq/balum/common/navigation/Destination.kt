@@ -8,6 +8,7 @@ private object Screens {
     const val SIGN_IN_SCREEN = "signIn"
     const val SIGN_UP_SCREEN = "signUp"
     const val FORGOT_PASSWORD_SCREEN = "forgotPassword"
+    const val RESET_PASSWORD_SUCCESSFUL_SCREEN = "resetPasswordSuccessful"
 }
 
 sealed class Destination(val route: String) {
@@ -15,6 +16,7 @@ sealed class Destination(val route: String) {
     object SignIn : Destination(Screens.SIGN_IN_SCREEN)
     object SignUp : Destination(Screens.SIGN_UP_SCREEN)
     object ForgotPassword : Destination(Screens.FORGOT_PASSWORD_SCREEN)
+    object ResetPasswordSuccessful : Destination(Screens.RESET_PASSWORD_SUCCESSFUL_SCREEN)
 }
 
 class NavigationActions(private val navController: NavHostController) {
@@ -33,5 +35,9 @@ class NavigationActions(private val navController: NavHostController) {
 
     fun navigateToForgotPassword(navOptions: NavOptions? = null) {
         navController.navigate(Destination.ForgotPassword.route, navOptions)
+    }
+
+    fun navigateToResetPasswordSuccessful(navOptions: NavOptions? = null) {
+        navController.navigate(Destination.ResetPasswordSuccessful.route, navOptions)
     }
 }

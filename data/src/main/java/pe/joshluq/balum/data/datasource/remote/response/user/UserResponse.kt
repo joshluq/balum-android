@@ -7,4 +7,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 class UserResponse(
     @JsonProperty("id") val id: String?,
     @JsonProperty("username") val username: String?,
+    @JsonProperty("name") val name: String?,
+    @JsonProperty("lastname") val lastname: String?,
 )

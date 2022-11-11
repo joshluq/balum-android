@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import pe.joshluq.balum.feature.credentialrecovery.CredentialRecoveryScreen
+import pe.joshluq.balum.feature.credentialrecovery.CredentialRecoverySuccessScreen
 import pe.joshluq.balum.feature.signin.SignInScreen
 import pe.joshluq.balum.feature.signup.SignUpScreen
 import pe.joshluq.balum.feature.welcome.WelcomeScreen
@@ -52,6 +53,12 @@ fun NavGraph(
         }
         composable(Destination.ForgotPassword.route) {
             CredentialRecoveryScreen(
+                modifier = modifier,
+                navigator = credentialRecoveryNavigator
+            )
+        }
+        composable(Destination.ResetPasswordSuccessful.route) {
+            CredentialRecoverySuccessScreen(
                 modifier = modifier,
                 navigator = credentialRecoveryNavigator
             )

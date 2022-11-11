@@ -1,34 +1,28 @@
 package pe.joshluq.balum.feature.credentialrecovery
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import pe.joshluq.balum.R
 import pe.joshluq.balum.common.navigation.CredentialRecoveryNavigator
 import pe.joshluq.balum.ui.theme.BalumTheme
 import pe.joshluq.balum.ui.theme.LightBlue1
-import pe.joshluq.balum.ui.widget.*
+import pe.joshluq.balum.ui.widget.PrimaryButton
 
 @Composable
-fun CredentialRecoveryScreen(
+fun CredentialRecoverySuccessScreen(
     modifier: Modifier = Modifier,
-    viewModel: CredentialRecoveryViewModel = hiltViewModel(),
     navigator: CredentialRecoveryNavigator = CredentialRecoveryNavigator
 ) {
     Scaffold(
@@ -43,30 +37,19 @@ fun CredentialRecoveryScreen(
         }
     ) { contentPadding ->
         Column(modifier = Modifier.padding(contentPadding)) {
-            Header(Modifier.weight(1f))
-            Form(Modifier.weight(3f), viewModel)
-        }
-    }
-    if (viewModel.state is RecoverSuccessfulState) {
-        viewModel.resetState()
-        navigator.navigateToSuccess()
-    }
-    if (viewModel.state is LoadingState) {
-        LoadingDialog {}
-    }
-    val message = (viewModel.state as? ErrorState)?.message.orEmpty()
-    if (message.isNotBlank()) {
-        SimpleDialog(description = message) {
-            viewModel.resetState()
+            Body()
+            ButtonContainer {
+                navigator.navigateToBack()
+            }
         }
     }
 }
 
 @Preview
 @Composable
-fun CredentialRecoveryScreenPreview() {
+fun CredentialRecoverySuccessScreenPreview() {
     BalumTheme {
-        CredentialRecoveryScreen()
+        CredentialRecoverySuccessScreen()
     }
 }
 
@@ -93,58 +76,26 @@ private fun RecoveryAppBar(navigator: CredentialRecoveryNavigator = CredentialRe
 }
 
 @Composable
-private fun Header(modifier: Modifier = Modifier) {
-    Row(modifier = modifier) {
+private fun Body(modifier: Modifier = Modifier) {
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             modifier = Modifier.padding(32.dp),
             text = stringResource(R.string.credentialrecovery_subtitle),
             textAlign = TextAlign.Center
         )
-    }
-}
 
-@Composable
-private fun Form(
-    modifier: Modifier = Modifier,
-    viewModel: CredentialRecoveryViewModel
-) {
-    val focusManager = LocalFocusManager.current
-    val emailMessage = (viewModel.state as? EmailErrorState)?.message.orEmpty()
-    Column(
-        modifier = modifier
-            .clip(shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(top = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        EmailTextField(
-            value = viewModel.email,
-            onValueChange = { newValue ->
-                viewModel.resetState()
-                viewModel.email = newValue
-            },
-            imeAction = ImeAction.Done,
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    focusManager.clearFocus()
-                }
-            ),
-            errorMessage = ErrorMessage(emailMessage)
-        )
-        ButtonContainer(
-            onResetButtonClick = {
-                viewModel.recoverCredential()
-            }
+        Image(
+            painter = painterResource(id = R.drawable.img_send_email),
+            contentDescription = null,
+            modifier = Modifier.padding(top = 32.dp)
         )
     }
 }
-
 
 @Composable
 private fun ButtonContainer(
     modifier: Modifier = Modifier,
-    onResetButtonClick: () -> Unit,
+    onBackButtonClick: () -> Unit,
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
@@ -152,8 +103,8 @@ private fun ButtonContainer(
         verticalArrangement = Arrangement.Bottom
     ) {
         PrimaryButton(
-            text = stringResource(R.string.credentialrecovery_button),
-            onClick = onResetButtonClick
+            text = stringResource(R.string.credentialrecovery_back_button),
+            onClick = onBackButtonClick
         )
         Spacer(Modifier.height(32.dp))
     }

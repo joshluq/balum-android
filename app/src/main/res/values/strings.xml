@@ -39,5 +39,6 @@
     <string name="credentialrecovery_title">Forgot Password?</string>
     <string name="credentialrecovery_subtitle">Enter your registrated email address to receive password reset instruction.</string>
     <string name="credentialrecovery_button">Reset Password</string>
+    <string name="credentialrecovery_back_button">Back to Login</string>
 
 </resources>

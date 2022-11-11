@@ -9,8 +9,8 @@ import kotlin.jvm.Throws
 fun mapToUser(response: UserResponse) = User(
     id = response.id ?: throw IllegalArgumentException(),
     profile = Profile(
-        name = "",
-        lastName = "",
+        name = response.name ?: String(),
+        lastName = response.lastname ?: String(),
         email = response.username ?: throw IllegalArgumentException()
     ),
 )

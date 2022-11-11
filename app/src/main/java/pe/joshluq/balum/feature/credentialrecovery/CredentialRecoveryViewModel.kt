@@ -70,7 +70,7 @@ class CredentialRecoveryViewModel @Inject constructor(
         }
     }
 
-    fun clearError() {
+    fun resetState() {
         state = InitialState
     }
 }

@@ -83,6 +83,8 @@ sealed interface CredentialRecoveryNavigator {
 
     fun navigateToBack()
 
+    fun navigateToSuccess()
+
     companion object : CredentialRecoveryNavigator {
         private var navigationActions: NavigationActions? = null
 
@@ -95,5 +97,11 @@ sealed interface CredentialRecoveryNavigator {
             navigationActions?.navigateToBack()
         }
 
+        override fun navigateToSuccess() {
+            val options = navOptions {
+                popUpTo(Destination.SignIn.route) { inclusive = false }
+            }
+            navigationActions?.navigateToResetPasswordSuccessful(options)
+        }
     }
 }
